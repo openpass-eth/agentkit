@@ -6,7 +6,7 @@ type PluginActions<T> = T extends AgentPlugin ? T["actions"] : Record<string, ne
 export type TempoAgent<TActions = Record<string, never>> = {
   publicClient: PublicClient;
   walletClient: WalletClient;
-  actions: TActions;
+  actions: TActions; // for testing
   tools: AgentTool[];
   use: <P extends AgentPlugin>(plugin: P) => TempoAgent<TActions & PluginActions<P>>;
 };

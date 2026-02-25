@@ -15,6 +15,11 @@
       "types": "./vercelai/index.ts",
       "import": "./vercelai/index.mjs",
       "default": "./vercelai/index.ts"
+    },
+    "./openai": {
+      "types": "./openai/index.ts",
+      "import": "./openai/index.mjs",
+      "default": "./openai/index.ts"
     }
   },
   "devDependencies": {
@@ -25,7 +30,9 @@
     "viem": "^2.46.3"
   },
   "dependencies": {
+    "@openai/agents": "^0.5.1",
     "ai": "^6.0.99",
+    "openai": "^4.85.4",
     "zod": "^3.23.8"
   }
 }
