@@ -1,0 +1,15 @@
+{
+  "name": "basic-agent",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "dependencies": {
+    "@tempo-agent-kit/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
