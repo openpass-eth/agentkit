@@ -7,7 +7,8 @@
     "@types/bun": "latest"
   },
   "dependencies": {
-    "@tempo-agent-kit/core": "workspace:*"
+    "@tempo-agent-kit/core": "workspace:*",
+    "@tempo-agent-kit/token-plugin": "workspace:*"
   },
   "peerDependencies": {
     "typescript": "^5"

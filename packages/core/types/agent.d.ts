@@ -6,12 +6,12 @@ export interface AgentTool {
   description: string;
   similes: string[];
   schema: z.ZodType<any>;
-  execute(agent: TempoAgent, input: Record<string, any>): Record<string, any>;
+  execute(agent: TempoAgent, input: Record<string, any>): any | Promise<any>;
 }
 
 export interface AgentPlugin {
   name: string;
-  methods: Record<string, any>;
+  actions: Record<string, any>;
   tools: AgentTool[];
   initialize(agent: TempoAgent): void;
 }

@@ -10,6 +10,11 @@
       "types": "./index.ts",
       "import": "./index.ts",
       "default": "./index.ts"
+    },
+    "./vercelai": {
+      "types": "./vercelai/index.ts",
+      "import": "./vercelai/index.mjs",
+      "default": "./vercelai/index.ts"
     }
   },
   "devDependencies": {
@@ -18,5 +23,9 @@
   "peerDependencies": {
     "typescript": "^5",
     "viem": "^2.46.3"
+  },
+  "dependencies": {
+    "ai": "^6.0.99",
+    "zod": "^3.23.8"
   }
 }

@@ -1,14 +1,14 @@
 import type { PublicClient, WalletClient } from "viem";
 import type { AgentPlugin, AgentTool } from "../types/agent";
 
-type PluginMethods<T> = T extends AgentPlugin ? T["methods"] : Record<string, never>;
+type PluginActions<T> = T extends AgentPlugin ? T["actions"] : Record<string, never>;
 
-export type TempoAgent<TPlugins = Record<string, never>> = {
+export type TempoAgent<TActions = Record<string, never>> = {
   publicClient: PublicClient;
   walletClient: WalletClient;
-  methods: TPlugins;
+  actions: TActions;
   tools: AgentTool[];
-  use: <P extends AgentPlugin>(plugin: P) => TempoAgent<TPlugins & PluginMethods<P>>;
+  use: <P extends AgentPlugin>(plugin: P) => TempoAgent<TActions & PluginActions<P>>;
 };
 
 export type CreateTempoAgentParameters = {
@@ -16,15 +16,15 @@ export type CreateTempoAgentParameters = {
   walletClient: WalletClient;
 };
 
-export function createTempoAgent<TPlugins = Record<string, never>>(
+export function createTempoAgent<TActions = Record<string, never>>(
   parameters: CreateTempoAgentParameters
-): TempoAgent<TPlugins> {
+): TempoAgent<TActions> {
   const plugins = new Map<string, AgentPlugin>();
 
   const agent = {
     publicClient: parameters.publicClient,
     walletClient: parameters.walletClient,
-    methods: {},
+    actions: {},
     tools: [] as AgentTool[],
   };
 
@@ -36,12 +36,12 @@ export function createTempoAgent<TPlugins = Record<string, never>>(
 
       plugin.initialize(base);
 
-      const newMethods = { ...base.methods } as Record<string, unknown>;
-      for (const [methodName, method] of Object.entries(plugin.methods)) {
-        if (newMethods[methodName]) {
-          throw new Error(`Method ${methodName} already exists in methods`);
+      const newActions = { ...base.actions } as Record<string, unknown>;
+      for (const [actionName, action] of Object.entries(plugin.actions)) {
+        if (newActions[actionName]) {
+          throw new Error(`Action ${actionName} already exists in actions`);
         }
-        newMethods[methodName] = method.bind(plugin);
+        newActions[actionName] = action.bind(plugin);
       }
 
       const newTools = [...base.tools];
@@ -53,7 +53,7 @@ export function createTempoAgent<TPlugins = Record<string, never>>(
 
       const combined = {
         ...base,
-        methods: newMethods,
+        actions: newActions,
         tools: newTools,
       };
 
@@ -61,5 +61,5 @@ export function createTempoAgent<TPlugins = Record<string, never>>(
     };
   }
 
-  return Object.assign(agent, { use: use(agent) }) as unknown as TempoAgent<TPlugins>;
+  return Object.assign(agent, { use: use(agent) }) as unknown as TempoAgent<TActions>;
 }
