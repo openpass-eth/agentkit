@@ -1,10 +1,24 @@
 import { createTempoAgent, type AgentTool } from "@tempo-agent-kit/core"
 import { tokenPlugin } from "@tempo-agent-kit/token-plugin"
+import { createClient, createPublicClient, http, publicActions, walletActions } from "viem";
+import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
+import { tempoModerato } from "viem/chains";
+import { tempoActions } from "viem/tempo";
 
 async function main() {
+  const account = privateKeyToAccount(generatePrivateKey())
+  const client = createClient({
+    account: account,
+    chain: tempoModerato,
+    transport: http(),
+  })
+    .extend(publicActions)
+    .extend(walletActions)
+    .extend(tempoActions())
+
+
   const agent = createTempoAgent({
-    publicClient: null as any,
-    walletClient: null as any,
+    client: client,
   }).use(tokenPlugin);
 
   console.log("Agent Tools:", agent.tools.map((t: AgentTool) => t.name));

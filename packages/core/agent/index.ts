@@ -1,31 +1,28 @@
-import type { PublicClient, WalletClient } from "viem";
+import type { Client } from "viem";
 import type { AgentPlugin, AgentTool, ActionTransform } from "../types/agent";
 
-type PluginActions<T> = T extends AgentPlugin<infer A> ? ActionTransform<A> : Record<string, never>;
+type PluginActions<TClient extends Client, T> = T extends AgentPlugin<infer A> ? ActionTransform<TClient, A> : Record<string, never>;
 
-export type TempoAgent<TActions = Record<string, any>> = {
-  publicClient: PublicClient;
-  walletClient: WalletClient;
+export type TempoAgent<TClient extends Client = Client, TActions = Record<string, any>> = {
+  client: TClient;
   actions: TActions;
-  tools: AgentTool[];
-  use: <P extends AgentPlugin<any>>(plugin: P) => TempoAgent<TActions & PluginActions<P>>;
+  tools: AgentTool<TClient>[];
+  use: <P extends AgentPlugin<any>>(plugin: P) => TempoAgent<TClient, TActions & PluginActions<TClient, P>>;
 };
 
-export type CreateTempoAgentParameters = {
-  publicClient: PublicClient;
-  walletClient: WalletClient;
+export type CreateTempoAgentParameters<TClient extends Client = Client> = {
+  client: TClient;
 };
 
-export function createTempoAgent<TActions = Record<string, never>>(
-  parameters: CreateTempoAgentParameters
-): TempoAgent<TActions> {
+export function createTempoAgent<TClient extends Client, TActions = Record<string, never>>(
+  parameters: CreateTempoAgentParameters<TClient>
+): TempoAgent<TClient, TActions> {
   const plugins = new Map<string, AgentPlugin>();
 
   const agent = {
-    publicClient: parameters.publicClient,
-    walletClient: parameters.walletClient,
+    client: parameters.client,
     actions: {},
-    tools: [] as AgentTool[],
+    tools: [] as AgentTool<TClient>[],
   };
 
   function use(base: any) {
@@ -59,5 +56,5 @@ export function createTempoAgent<TActions = Record<string, never>>(
     };
   }
 
-  return Object.assign(agent, { use: use(agent) }) as unknown as TempoAgent<TActions>;
+  return Object.assign(agent, { use: use(agent) }) as unknown as TempoAgent<TClient, TActions>;
 }
