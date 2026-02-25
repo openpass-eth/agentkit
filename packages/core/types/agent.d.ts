@@ -9,9 +9,17 @@ export interface AgentTool {
   execute(agent: TempoAgent, input: Record<string, any>): any | Promise<any>;
 }
 
-export interface AgentPlugin {
+export type StripAgentArg<T> = T extends (agent: TempoAgent<any>, ...args: infer P) => infer R
+  ? (...args: P) => R
+  : T;
+
+export type ActionTransform<T> = {
+  [K in keyof T]: StripAgentArg<T[K]>;
+};
+
+export interface AgentPlugin<TActions = Record<string, any>> {
   name: string;
-  actions: Record<string, any>;
+  actions: TActions;
   tools: AgentTool[];
-  initialize(agent: TempoAgent): void;
+  initialize(agent: TempoAgent<any>): void;
 }

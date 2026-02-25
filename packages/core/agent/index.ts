@@ -1,14 +1,14 @@
 import type { PublicClient, WalletClient } from "viem";
-import type { AgentPlugin, AgentTool } from "../types/agent";
+import type { AgentPlugin, AgentTool, ActionTransform } from "../types/agent";
 
-type PluginActions<T> = T extends AgentPlugin ? T["actions"] : Record<string, never>;
+type PluginActions<T> = T extends AgentPlugin<infer A> ? ActionTransform<A> : Record<string, never>;
 
-export type TempoAgent<TActions = Record<string, never>> = {
+export type TempoAgent<TActions = Record<string, any>> = {
   publicClient: PublicClient;
   walletClient: WalletClient;
-  actions: TActions; // for testing
+  actions: TActions;
   tools: AgentTool[];
-  use: <P extends AgentPlugin>(plugin: P) => TempoAgent<TActions & PluginActions<P>>;
+  use: <P extends AgentPlugin<any>>(plugin: P) => TempoAgent<TActions & PluginActions<P>>;
 };
 
 export type CreateTempoAgentParameters = {
