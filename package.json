@@ -1,5 +1,5 @@
 {
-  "name": "tempo-agent-kit",
+  "name": "@openpass-eth/agentkit",
   "private": true,
   "scripts": {
     "build": "turbo run build",

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { AgentTool, TempoAgent } from "@tempo-agent-kit/core";
+import type { AgentTool, Agent } from "@openpass-eth/agentkit";
 import type { Client } from "viem";
 import type { TempoActions } from "viem/tempo";
 import { get_balance } from "../actions";
@@ -13,7 +13,7 @@ const balanceTool: AgentTool = {
   description: "Get the balance of a token for the agent.",
   similes: ["check_balance", "show_funds"],
   schema: balanceSchema,
-  execute: async (agent: TempoAgent<Client & TempoActions>, input: Record<string, any>) => {
+  execute: async (agent: Agent<Client & TempoActions>, input: Record<string, any>) => {
     const { tokenAddress } = input;
     try {
       const balance = await get_balance(agent, tokenAddress);

@@ -3,20 +3,20 @@ import type { AgentPlugin, AgentTool, ActionTransform } from "../types/agent";
 
 type PluginActions<TClient extends Client, T> = T extends AgentPlugin<infer A> ? ActionTransform<TClient, A> : Record<string, never>;
 
-export type TempoAgent<TClient extends Client = Client, TActions = Record<string, any>> = {
+export type Agent<TClient extends Client = Client, TActions = Record<string, any>> = {
   client: TClient;
   actions: TActions;
   tools: AgentTool<TClient>[];
-  use: <P extends AgentPlugin<any>>(plugin: P) => TempoAgent<TClient, TActions & PluginActions<TClient, P>>;
+  use: <P extends AgentPlugin<any>>(plugin: P) => Agent<TClient, TActions & PluginActions<TClient, P>>;
 };
 
-export type CreateTempoAgentParameters<TClient extends Client = Client> = {
+export type CreateAgentParameters<TClient extends Client = Client> = {
   client: TClient;
 };
 
-export function createTempoAgent<TClient extends Client, TActions = Record<string, never>>(
-  parameters: CreateTempoAgentParameters<TClient>
-): TempoAgent<TClient, TActions> {
+export function createAgent<TClient extends Client, TActions = Record<string, never>>(
+  parameters: CreateAgentParameters<TClient>
+): Agent<TClient, TActions> {
   const plugins = new Map<string, AgentPlugin>();
 
   const agent = {
@@ -56,5 +56,5 @@ export function createTempoAgent<TClient extends Client, TActions = Record<strin
     };
   }
 
-  return Object.assign(agent, { use: use(agent) }) as unknown as TempoAgent<TClient, TActions>;
+  return Object.assign(agent, { use: use(agent) }) as unknown as Agent<TClient, TActions>;
 }

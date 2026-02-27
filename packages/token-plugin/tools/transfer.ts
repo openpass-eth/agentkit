@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { AgentTool, TempoAgent } from "@tempo-agent-kit/core";
+import type { AgentTool, Agent } from "@openpass-eth/agentkit";
 import { transfer } from "../actions";
 
 const transferSchema = z.object({
@@ -13,7 +13,7 @@ const transferTool: AgentTool = {
   description: "Transfer native or SPL tokens to a recipient address.",
   similes: ["send_tokens", "pay_address"],
   schema: transferSchema,
-  execute: async (agent: TempoAgent, input: Record<string, any>) => {
+  execute: async (agent: Agent, input: Record<string, any>) => {
     const { to, amount, tokenAddress } = input;
     const hash = await transfer(agent, to, amount, tokenAddress);
     return {

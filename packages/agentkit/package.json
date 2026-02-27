@@ -1,5 +1,5 @@
 {
-  "name": "@tempo-agent-kit/core",
+  "name": "@openpass-eth/agentkit",
   "main": "index.ts",
   "module": "index.ts",
   "types": "index.ts",

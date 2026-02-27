@@ -1,4 +1,4 @@
 <div align="center">
 
-# Tempo Agent Kit
+# OpenPass AgentKit
 </div>

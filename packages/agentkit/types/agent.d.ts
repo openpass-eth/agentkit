@@ -1,16 +1,16 @@
 import { z } from "zod";
 import type { Client } from "viem";
-import type { TempoAgent } from "../agent";
+import type { Agent } from "../agent";
 
 export interface AgentTool<TClient extends Client = Client> {
   name: string;
   description: string;
   similes: string[];
   schema: z.AnyZodObject;
-  execute(agent: TempoAgent<TClient, any>, input: Record<string, any>): any | Promise<any>;
+  execute(agent: Agent<TClient, any>, input: Record<string, any>): any | Promise<any>;
 }
 
-export type StripAgentArg<TClient extends Client, T> = T extends (agent: TempoAgent<TClient, any>, ...args: infer P) => infer R
+export type StripAgentArg<TClient extends Client, T> = T extends (agent: Agent<TClient, any>, ...args: infer P) => infer R
   ? (...args: P) => R
   : T;
 

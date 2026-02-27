@@ -1,11 +1,11 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
-import type { TempoAgent } from "../agent";
+import type { Agent } from "../agent";
 
 /**
- * Converts TempoAgent tools to LangChain StructuredTool format.
+ * Converts Agent tools to LangChain StructuredTool format.
  * Includes similes in the description for better discovery.
  */
-export const toLangChainTools = (agent: TempoAgent): DynamicStructuredTool[] => {
+export const toLangChainTools = (agent: Agent): DynamicStructuredTool[] => {
   return agent.tools.map((t) => {
     return new DynamicStructuredTool({
       name: t.name,

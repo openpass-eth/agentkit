@@ -1,4 +1,4 @@
-import type { TempoAgent } from "@tempo-agent-kit/core";
+import type { Agent } from "@openpass-eth/agentkit";
 import { type Client, type Address } from "viem";
 import { type TempoActions } from "viem/tempo";
 
@@ -6,7 +6,7 @@ import { type TempoActions } from "viem/tempo";
  * Get the balance of the native token or a specific token.
  */
 export async function get_balance(
-  agent: TempoAgent<Client & TempoActions>,
+  agent: Agent<Client & TempoActions>,
   tokenAddress: string,
 ): Promise<string> {
   const address = agent.client.account?.address;
@@ -25,7 +25,7 @@ export async function get_balance(
  * Transfer tokens to another address.
  */
 export async function transfer(
-  agent: TempoAgent,
+  agent: Agent,
   to: string,
   amount: number,
   tokenAddress?: string,

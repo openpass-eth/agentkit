@@ -1,5 +1,5 @@
 {
-    "name": "@tempo-agent-kit/token-plugin",
+    "name": "@openpass-eth/token-plugin",
     "main": "index.ts",
     "module": "index.ts",
     "types": "index.ts",
@@ -16,7 +16,7 @@
         "@types/bun": "latest"
     },
     "dependencies": {
-        "@tempo-agent-kit/core": "workspace:*",
+        "@openpass-eth/agentkit": "workspace:*",
         "zod": "^3.22.4"
     },
     "peerDependencies": {

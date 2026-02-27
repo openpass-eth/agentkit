@@ -1,5 +1,5 @@
-import { createTempoAgent, type AgentTool } from "@tempo-agent-kit/core"
-import { tokenPlugin } from "@tempo-agent-kit/token-plugin"
+import { createAgent, type AgentTool } from "@openpass-eth/agentkit"
+import { tokenPlugin } from "@openpass-eth/token-plugin"
 import { createClient, http, publicActions, walletActions } from "viem";
 import { generatePrivateKey, privateKeyToAccount } from "viem/accounts";
 import { tempoModerato } from "viem/chains";
@@ -16,7 +16,7 @@ async function main() {
     .extend(walletActions)
     .extend(tempoActions())
 
-  const agent = createTempoAgent({
+  const agent = createAgent({
     client: client,
   }).use(tokenPlugin);
 

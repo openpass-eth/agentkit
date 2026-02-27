@@ -1,4 +1,4 @@
-import type { AgentPlugin } from "@tempo-agent-kit/core";
+import type { AgentPlugin } from "@openpass-eth/agentkit";
 import transferTool from "./tools/transfer";
 import balanceTool from "./tools/balance";
 import * as actions from "./actions";
