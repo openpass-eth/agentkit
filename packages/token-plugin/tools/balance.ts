@@ -1,11 +1,10 @@
 import { z } from "zod";
 import type { AgentTool, Agent } from "@openpass-eth/agentkit";
-import type { Client } from "viem";
-import type { TempoActions } from "viem/tempo";
+import { type Client, type PublicActions, type WalletActions } from "viem";
 import { get_balance } from "../actions";
 
 const balanceSchema = z.object({
-  tokenAddress: z.string().describe("The token address to check the balance of"),
+  tokenAddress: z.string().optional().describe("The token address to check the balance of (optional, defaults to native token)"),
 });
 
 const balanceTool: AgentTool = {
@@ -13,14 +12,14 @@ const balanceTool: AgentTool = {
   description: "Get the balance of a token for the agent.",
   similes: ["check_balance", "show_funds"],
   schema: balanceSchema,
-  execute: async (agent: Agent<Client & TempoActions>, input: Record<string, any>) => {
+  execute: async (agent: Agent<Client & PublicActions & WalletActions>, input: Record<string, any>) => {
     const { tokenAddress } = input;
     try {
-      const balance = await get_balance(agent, tokenAddress);
+      const balanceInfo = await get_balance(agent, tokenAddress);
       return {
         status: "success",
-        balance,
-        tokenAddress,
+        ...balanceInfo,
+        tokenAddress: tokenAddress || "native",
       };
     } catch (error: any) {
       return {

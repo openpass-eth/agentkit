@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { AgentTool, Agent } from "@openpass-eth/agentkit";
+import { type Client, type PublicActions, type WalletActions } from "viem";
 import { transfer } from "../actions";
 
 const transferSchema = z.object({
@@ -10,19 +11,23 @@ const transferSchema = z.object({
 
 const transferTool: AgentTool = {
   name: "transfer_token",
-  description: "Transfer native or SPL tokens to a recipient address.",
+  description: "Transfer native or ERC20 tokens to a recipient address.",
   similes: ["send_tokens", "pay_address"],
   schema: transferSchema,
-  execute: async (agent: Agent, input: Record<string, any>) => {
+  execute: async (agent: Agent<Client & PublicActions & WalletActions>, input: Record<string, any>) => {
     const { to, amount, tokenAddress } = input;
-    const hash = await transfer(agent, to, amount, tokenAddress);
-    return {
-      status: "success",
-      hash,
-      to,
-      amount,
-      tokenAddress: tokenAddress || "native",
-    };
+    try {
+      const transferInfo = await transfer(agent, to, amount, tokenAddress);
+      return {
+        status: "success",
+        ...transferInfo,
+      };
+    } catch (error: any) {
+      return {
+        status: "error",
+        message: error.message || "Failed to transfer token",
+      };
+    }
   },
 };
 
